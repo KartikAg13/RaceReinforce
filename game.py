@@ -23,11 +23,15 @@ def catmull_rom_spline(points, resolution = 5, loop = True):
             spline_pts.append((x, y))
     return spline_pts
 
+# start again with inner points first
 outer_points = [(1700, 950), (300, 950), (150, 800), (300, 650), (400, 750), (300, 800), (400, 850), (500, 800), (500, 600), (400, 500), (600, 400), 
                 (300, 300), (400, 200), (1000, 100), (1010, 110), (1000, 120), (900, 200), (900, 300), (800, 300), (850, 400), (925, 475), (1010, 550),
                 (1100, 600), (1200, 650), (1300, 650), (1400, 750), (1400, 350), (1450, 300), (1500, 250), (1550, 300), (1600, 350), (1600, 850), (1700, 850)]
 
+inner_points = [(1650, 900), (350, 900)]
+
 smoothed_outer = catmull_rom_spline(outer_points, resolution=5, loop=True)
+smoothed_inner = catmull_rom_spline(inner_points, resolution=5, loop=True)
 
 pygame.init()
 screen = pygame.display.set_mode((1900, 1000))
@@ -43,9 +47,11 @@ while running:
 
     # Draw outer boundary
     pygame.draw.polygon(screen, (100, 100, 100), smoothed_outer)
+    pygame.draw.polygon(screen, (100, 100, 100), smoothed_inner)
 
     # Outline
     pygame.draw.polygon(screen, (255, 255, 255), smoothed_outer, 3)
+    pygame.draw.polygon(screen, (255, 255, 255), smoothed_inner, 3)
 
     pygame.display.flip()
     clock.tick(60)
